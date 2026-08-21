@@ -279,6 +279,12 @@ img {
   border: 1px solid rgba(31, 157, 116, 0.25);
 }
 
+.alert-demo {
+  background: #fff8e6;
+  color: #7a4f00;
+  border: 1px solid #f2a93b55;
+}
+
 /* ---------- Utility ---------- */
 .text-muted {
   color: var(--color-ink-muted);

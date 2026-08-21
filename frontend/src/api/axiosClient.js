@@ -2,13 +2,24 @@ import axios from 'axios';
 
 // Every API call in the app goes through this one client, per requirement #18
 // ("central API service/configuration so the backend URL is not repeated everywhere").
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 export const TOKEN_KEY = 'cartnova_token';
-export const USER_KEY = 'cartnova_user';
+export const USER_KEY  = 'cartnova_user';
+
+/**
+ * DEMO_MODE is true when:
+ *   - VITE_API_BASE_URL is not set (GitHub Pages public demo build)
+ *   - or VITE_API_BASE_URL is explicitly set to the string "demo"
+ *
+ * In demo mode the product/cart API modules fall back to local mock data
+ * stored in demoService.js. Auth (login/register) and orders are disabled
+ * in demo mode because they require a live database.
+ */
+export const DEMO_MODE = !BASE_URL || BASE_URL === 'demo';
 
 const apiClient = axios.create({
-  baseURL: BASE_URL,
+  baseURL: DEMO_MODE ? 'http://localhost:8080' : BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

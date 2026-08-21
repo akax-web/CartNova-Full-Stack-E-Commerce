@@ -2,11 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { fetchProductById } from '../api/productApi';
 import { addToCart } from '../api/cartApi';
-import { extractErrorMessage } from '../api/axiosClient';
+import { extractErrorMessage, DEMO_MODE } from '../api/axiosClient';
 import { formatCurrency } from '../utils/formatCurrency';
 import { useAuth } from '../context/AuthContext.jsx';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
 import ErrorMessage from '../components/ErrorMessage.jsx';
+
+// Map of productId → image path relative to the public directory.
+// Vite rewrites static public assets with the configured base path, so
+// we use absolute-from-root paths here (Vite handles the prefix).
+const PRODUCT_IMAGES = {
+  1: 'images/samsung-s25.jpg',
+  2: 'images/iphone-16.jpg',
+  3: 'images/asus-vivobook-15.jpg',
+  4: 'images/hp-victus.jpg',
+  5: 'images/lenovo-loq.jpg',
+  6: 'images/mouse.jpg',
+  7: 'images/keyboard.jpg',
+  8: 'images/charger.jpg',
+};
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
@@ -33,7 +47,8 @@ export default function ProductDetailsPage() {
   useEffect(load, [id]);
 
   async function handleAddToCart() {
-    if (!isAuthenticated) {
+    // In live-backend mode: require login.
+    if (!DEMO_MODE && !isAuthenticated) {
       navigate('/login', { state: { from: { pathname: `/products/${id}` } } });
       return;
     }
@@ -55,6 +70,7 @@ export default function ProductDetailsPage() {
   if (!product) return null;
 
   const outOfStock = product.quantity <= 0;
+  const imageSrc = PRODUCT_IMAGES[product.productsId];
 
   return (
     <div className="page">
@@ -64,11 +80,16 @@ export default function ProductDetailsPage() {
         </Link>
 
         <div className="product-detail" style={{ marginTop: 20 }}>
-          <div
-            className="product-detail-tile"
-            style={{ background: 'linear-gradient(135deg, #eef0fb, #f2e6cf)' }}
-          >
-            <span>{product.productName?.charAt(0) || '?'}</span>
+          <div className="product-detail-tile">
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt={product.productName}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
+              />
+            ) : (
+              <span>{product.productName?.charAt(0) || '?'}</span>
+            )}
           </div>
 
           <div>
@@ -83,9 +104,28 @@ export default function ProductDetailsPage() {
               <span className="badge badge-success">{product.quantity} in stock</span>
             )}
 
+            {product.description && (
+              <p className="text-muted" style={{ marginTop: 16, lineHeight: 1.6 }}>
+                {product.description}
+              </p>
+            )}
+
             <div style={{ marginTop: 28 }}>
               {addError && <ErrorMessage message={addError} />}
-              {added && <div className="alert alert-success">Added to cart.</div>}
+              {added && (
+                <div className="alert alert-success">
+                  Added to cart.{' '}
+                  <Link to="/cart" style={{ color: 'inherit', textDecoration: 'underline' }}>
+                    View cart →
+                  </Link>
+                </div>
+              )}
+
+              {DEMO_MODE && (
+                <div className="alert alert-demo" style={{ marginBottom: 16 }}>
+                  🛍️ <strong>Demo Mode</strong> — Cart is stored locally in your browser.
+                </div>
+              )}
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 18 }}>
                 <div className="cart-row-qty">

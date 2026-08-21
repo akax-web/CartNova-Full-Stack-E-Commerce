@@ -37,9 +37,13 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // React/Vite frontend
+        // React/Vite frontend (local dev + GitHub Pages production)
         configuration.setAllowedOrigins(
-                List.of("http://localhost:5173"));
+                List.of(
+                        "http://localhost:5173",
+                        "http://127.0.0.1:5173",
+                        "https://akax-web.github.io"
+                ));
 
         // HTTP methods allowed from frontend
         configuration.setAllowedMethods(

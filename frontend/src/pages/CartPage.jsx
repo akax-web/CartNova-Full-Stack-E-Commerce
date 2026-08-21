@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchCart, updateCartItemQuantity, removeCartItem } from '../api/cartApi';
-import { extractErrorMessage } from '../api/axiosClient';
+import { extractErrorMessage, DEMO_MODE } from '../api/axiosClient';
 import { formatCurrency } from '../utils/formatCurrency';
 import CartItemRow from '../components/CartItemRow.jsx';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
@@ -63,6 +63,13 @@ export default function CartPage() {
       <div className="container">
         <h1>Your Cart</h1>
 
+        {DEMO_MODE && (
+          <div className="alert alert-demo" style={{ marginBottom: 20 }}>
+            🛍️ <strong>Demo Mode</strong> — Your cart is stored locally in this browser.
+            Checkout requires a live backend.
+          </div>
+        )}
+
         {loading && <LoadingSpinner label="Loading your cart…" />}
         {!loading && error && <ErrorMessage message={error} onRetry={load} />}
 
@@ -102,9 +109,16 @@ export default function CartPage() {
                 <Link to="/" className="btn btn-outline">
                   Continue Shopping
                 </Link>
-                <button className="btn btn-primary" onClick={() => navigate('/checkout')}>
-                  Proceed to Checkout
-                </button>
+                {!DEMO_MODE && (
+                  <button className="btn btn-primary" onClick={() => navigate('/checkout')}>
+                    Proceed to Checkout
+                  </button>
+                )}
+                {DEMO_MODE && (
+                  <button className="btn btn-primary" disabled title="Checkout requires a live backend">
+                    Checkout (Demo Only)
+                  </button>
+                )}
               </div>
             </div>
           </>

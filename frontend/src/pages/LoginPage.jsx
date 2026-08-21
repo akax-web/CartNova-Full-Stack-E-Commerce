@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/authApi';
-import { extractErrorMessage } from '../api/axiosClient';
+import { extractErrorMessage, DEMO_MODE } from '../api/axiosClient';
 import { useAuth } from '../context/AuthContext.jsx';
 import ErrorMessage from '../components/ErrorMessage.jsx';
 
@@ -45,6 +45,16 @@ export default function LoginPage() {
         <p className="text-muted" style={{ marginBottom: 24 }}>
           Log in to your CartNova account.
         </p>
+
+        {DEMO_MODE && (
+          <div className="alert alert-demo" style={{ marginBottom: 20 }}>
+            🛍️ <strong>Demo Mode</strong> — Login requires a live backend. You can still browse
+            products and add items to your cart without logging in.{' '}
+            <Link to="/" style={{ color: 'inherit', textDecoration: 'underline' }}>
+              Browse products →
+            </Link>
+          </div>
+        )}
 
         {flashMessage && <div className="alert alert-error">{flashMessage}</div>}
         <ErrorMessage message={error} />
