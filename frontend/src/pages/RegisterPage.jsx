@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { registerUser } from '../api/authApi';
-import { extractErrorMessage, DEMO_MODE } from '../api/axiosClient';
+import { registerUser } from '../api/authApi'; import { extractErrorMessage } from '../api/axiosClient';
 import ErrorMessage from '../components/ErrorMessage.jsx';
 
 export default function RegisterPage() {
