@@ -21,6 +21,12 @@ export default function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    
+    if (DEMO_MODE) {
+      setError('User accounts are disabled in this demo. You can continue shopping and use the cart as a guest.');
+      return;
+    }
+
     setSubmitting(true);
     try {
       const response = await loginUser({ email, password });
@@ -46,15 +52,7 @@ export default function LoginPage() {
           Log in to your CartNova account.
         </p>
 
-        {DEMO_MODE && (
-          <div className="alert alert-demo" style={{ marginBottom: 20 }}>
-            🛍️ <strong>Demo Mode</strong> — Login requires a live backend. You can still browse
-            products and add items to your cart without logging in.{' '}
-            <Link to="/" style={{ color: 'inherit', textDecoration: 'underline' }}>
-              Browse products →
-            </Link>
-          </div>
-        )}
+
 
         {flashMessage && <div className="alert alert-error">{flashMessage}</div>}
         <ErrorMessage message={error} />

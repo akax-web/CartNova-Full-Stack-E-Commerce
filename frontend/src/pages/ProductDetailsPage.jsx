@@ -121,11 +121,7 @@ export default function ProductDetailsPage() {
                 </div>
               )}
 
-              {DEMO_MODE && (
-                <div className="alert alert-demo" style={{ marginBottom: 16 }}>
-                  🛍️ <strong>Demo Mode</strong> — Cart is stored locally in your browser.
-                </div>
-              )}
+
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 18 }}>
                 <div className="cart-row-qty">

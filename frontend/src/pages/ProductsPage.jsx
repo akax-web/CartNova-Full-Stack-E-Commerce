@@ -27,17 +27,9 @@ export default function ProductsPage() {
     <div className="page">
       <div className="container">
         <h1>Products</h1>
-        <p className="text-muted" style={{ marginBottom: DEMO_MODE ? 8 : 28 }}>
+        <p className="text-muted" style={{ marginBottom: 28 }}>
           Everything currently in the CartNova catalog.
         </p>
-
-        {DEMO_MODE && (
-          <div className="alert alert-demo" style={{ marginBottom: 28 }}>
-            <span style={{ fontWeight: 600 }}>🛍️ Demo Mode</span> — You are viewing sample
-            products. Login/Register and checkout are disabled without a live backend.
-            Cart browsing works locally via your browser.
-          </div>
-        )}
 
         {loading && <LoadingSpinner label="Loading products…" />}
         {!loading && error && <ErrorMessage message={error} onRetry={load} />}

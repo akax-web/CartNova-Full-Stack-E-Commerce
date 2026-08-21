@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../api/authApi';
-import { extractErrorMessage } from '../api/axiosClient';
+import { extractErrorMessage, DEMO_MODE } from '../api/axiosClient';
 import ErrorMessage from '../components/ErrorMessage.jsx';
 
 export default function RegisterPage() {
@@ -20,6 +20,11 @@ export default function RegisterPage() {
 
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
+      return;
+    }
+    
+    if (DEMO_MODE) {
+      setError('User accounts are disabled in this demo. You can continue shopping and use the cart as a guest.');
       return;
     }
 

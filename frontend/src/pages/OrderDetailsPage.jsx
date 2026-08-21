@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { fetchOrderItems } from '../api/orderApi';
-import { extractErrorMessage } from '../api/axiosClient';
+import { extractErrorMessage, DEMO_MODE } from '../api/axiosClient';
 import { formatCurrency } from '../utils/formatCurrency';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
 import ErrorMessage from '../components/ErrorMessage.jsx';
@@ -41,7 +41,11 @@ export default function OrderDetailsPage() {
         </div>
 
         {location.state?.justPlaced && (
-          <div className="alert alert-success">Your order was placed successfully.</div>
+          <div className="alert alert-success">
+            {DEMO_MODE
+              ? 'Checkout demo complete. This is a local test order. No real payment was processed.'
+              : 'Your order was placed successfully.'}
+          </div>
         )}
 
         {loading && <LoadingSpinner label="Loading order details…" />}

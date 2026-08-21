@@ -144,3 +144,47 @@ export function demoRemoveCartItem(cartItemId) {
   saveDemoCart(cart);
   return Promise.resolve({ data: { message: 'Removed' } });
 }
+
+// ── Orders ────────────────────────────────────────────────────────────────────
+
+export function demoCheckout(paymentMethod) {
+  const cart = getDemoCart();
+  if (cart.length === 0) return Promise.reject(new Error('Cart is empty'));
+  
+  const orderId = Date.now();
+  const newOrder = {
+    orderId,
+    orderDate: new Date().toISOString(),
+    orderStatus: 'DELIVERED',
+    totalAmount: cart.reduce((sum, item) => {
+      const p = DEMO_PRODUCTS.find(p => p.productsId === item.productId);
+      return sum + (p ? p.price * item.quantity : 0);
+    }, 0),
+    items: cart.map(item => ({
+      ...item,
+      price: DEMO_PRODUCTS.find(p => p.productsId === item.productId)?.price || 0
+    }))
+  };
+
+  const existingOrders = JSON.parse(localStorage.getItem('cartnova_demo_orders') || '[]');
+  existingOrders.push(newOrder);
+  localStorage.setItem('cartnova_demo_orders', JSON.stringify(existingOrders));
+
+  saveDemoCart([]); // Clear cart
+  return Promise.resolve({ data: { data: { orderId } } });
+}
+
+export function demoFetchMyOrders() {
+  const orders = JSON.parse(localStorage.getItem('cartnova_demo_orders') || '[]');
+  return Promise.resolve({ data: { data: orders } });
+}
+
+export function demoFetchOrderItems(orderId) {
+  const orders = JSON.parse(localStorage.getItem('cartnova_demo_orders') || '[]');
+  const order = orders.find(o => o.orderId === Number(orderId));
+  return Promise.resolve({ data: { data: order?.items || [] } });
+}
+
+export function demoFetchInvoice(orderId) {
+  return Promise.resolve({ data: { data: { invoiceId: `INV-${orderId}`, url: '#' } } });
+}
