@@ -21,11 +21,8 @@ export default function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    
-    if (DEMO_MODE) {
-      setError('User accounts are disabled in this demo. You can continue shopping and use the cart as a guest.');
-      return;
-    }
+
+
 
     setSubmitting(true);
     try {
