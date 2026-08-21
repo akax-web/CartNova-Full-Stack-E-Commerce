@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CartNova - Smart Online Shopping</title>
+    <script type="text/javascript">
+      // Single-page app routing fix for GitHub Pages.
+      // When GitHub Pages gets a 404 (because the path is a client-side route),
+      // it serves this 404.html. We redirect to the index with the path encoded
+      // as a query parameter. The main index.html decodes it and uses
+      // history.replaceState to restore the original URL.
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + 1).join('/') + '/?/' +
+        l.pathname.slice(1).split('/').slice(1).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
